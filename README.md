@@ -3,11 +3,8 @@
 FigmaのFrameをいい感じにJSONに変換してくれるFigma Plugin。
 
 ※ ChatGPT（GPT-4）との共作です。
-
-会話のログは以下です。
-
 <details>
-  <summary>クリックで展開するタイトル</summary>
+  <summary>ChatGPTとの会話ログ</summary>
   ## Figma JSON Exporter
 
 Started on: 2023/3/16 10:11:18
