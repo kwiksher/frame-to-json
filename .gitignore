@@ -6,3 +6,8 @@ node_modules
 out/
 dist/
 code.js
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
