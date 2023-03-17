@@ -53,6 +53,14 @@ function processNode(node: SceneNode): ProcessedNode {
     };
   }
 
+  if ("effects" in node) {
+    if (!baseNode.style) baseNode.style = {};
+    baseNode.style = {
+      ...baseNode.style,
+      effects: node.effects,
+    };
+  }
+
   if (node.type === "TEXT") {
     if (!baseNode.style) baseNode.style = {};
     baseNode.style = {
