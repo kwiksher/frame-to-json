@@ -6,6 +6,10 @@ interface ProcessedNode {
   locked: boolean;
   children?: ProcessedNode[];
   style?: object;
+  x?:number;
+  y?:number;
+  absoluteBoundingBox?:object;
+  exportSettings?:object;
 }
 
 function processNode(node: SceneNode): ProcessedNode {
@@ -79,6 +83,21 @@ function processNode(node: SceneNode): ProcessedNode {
       paragraphSpacing: node.paragraphSpacing,
       autoRename: node.autoRename,
     };
+  }
+
+  //add by nyamamoto
+  baseNode.style = {
+    ...baseNode.style,
+    x: node.x,
+    y: node.y,
+    absoluteBoundingBox:node.absoluteBoundingBox
+  }
+
+  if ("exportSettings" in node ){
+    baseNode.style = {
+      ...baseNode.style,
+      exportSettings:node.exportSettings
+    }
   }
 
   if ("children" in node) {
