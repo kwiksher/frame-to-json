@@ -12,7 +12,7 @@ interface ProcessedNode {
   exportSettings?:object;
 }
 
-function processNode(node: SceneNode): ProcessedNode {
+function processNode(node:SceneNode, exportedNodes:Array<object>): ProcessedNode {
   const baseNode: ProcessedNode = {
     id: node.id,
     name: node.name,
@@ -98,10 +98,23 @@ function processNode(node: SceneNode): ProcessedNode {
       ...baseNode.style,
       exportSettings:node.exportSettings
     }
+    if (node.exportSettings.length > 0 ){
+      exportedNodes.push({
+          id: node.id,
+          name: node.name,
+          type: node.type,
+          visible: node.visible,
+          x: node.x,
+          y: node.y,
+          absoluteBoundingBox:node.absoluteBoundingBox,
+          exportSettings:node.exportSettings
+        }
+      );
+    }
   }
 
   if ("children" in node) {
-    baseNode.children = (node as any).children.map((child: SceneNode) => processNode(child));
+    baseNode.children = (node as any).children.map((child: SceneNode) => processNode(child, exportedNodes));
   }
 
   return baseNode;
@@ -113,6 +126,7 @@ figma.showUI(__html__, { width: 400, height: 400 });
 
 figma.ui.onmessage = async (msg) => {
   if (msg.type === "export-frame") {
+
     const frameName = msg.frameName;
 
     const frame = figma.currentPage.findOne((node) => node.type === "FRAME" && node.name === frameName);
@@ -122,8 +136,10 @@ figma.ui.onmessage = async (msg) => {
       return;
     }
 
-    const processedFrame = processNode(frame);
-    const jsonData = JSON.stringify(processedFrame, null, 2);
+    const exportedNodes:Array<object> = [];
+    const processedFrame = processNode(frame, exportedNodes);
+    // const jsonData = JSON.stringify(processedFrame, null, 2);
+    const jsonData = JSON.stringify(exportedNodes);
     figma.ui.postMessage({ type: "json-data", jsonData: jsonData, frameName: frameName }); // Send the frameName along with jsonData
   }
 };
